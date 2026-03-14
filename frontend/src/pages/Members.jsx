@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SessionCard from '../components/SessionCard';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 const Members = () => {
     const [sessions, setSessions] = useState([]);
@@ -21,7 +21,7 @@ const Members = () => {
     useEffect(() => {
         const fetchSessions = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/sessions/semaine');
+                const response = await api.get('/sessions/semaine');
                 setSessions(response.data);
             } catch (error) {
                 console.error("Error fetching sessions", error);
@@ -37,14 +37,8 @@ const Members = () => {
 
     const handleVote = async (sessionId, presence) => {
         try {
-            const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:8000/api/sessions/${sessionId}/vote`, { presence }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            // Refresh sessions to show updated data
-            const response = await axios.get('http://localhost:8000/api/sessions/semaine', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await api.post(`/sessions/${sessionId}/vote`, { presence });
+            const response = await api.get('/sessions/semaine');
             setSessions(response.data);
         } catch (error) {
             alert("Erreur lors du vote : " + (error.response?.data?.detail || error.message));
@@ -53,17 +47,11 @@ const Members = () => {
 
     const handleGenerateSchedule = async () => {
         if (!window.confirm("Voulez-vous générer le planning pour la semaine prochaine ?")) return;
-        
+
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:8000/api/sessions/generate', {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const response = await api.post('/sessions/generate');
             alert(response.data.message);
-            // Refresh sessions
-            const sessionsRes = await axios.get('http://localhost:8000/api/sessions/semaine', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const sessionsRes = await api.get('/sessions/semaine');
             setSessions(sessionsRes.data);
         } catch (error) {
             console.error("Error generating schedule", error);
@@ -76,7 +64,7 @@ const Members = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            
+
             <main className="flex-grow container mx-auto px-4 py-8">
                 <div className="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
                     <h1 className="text-3xl font-bold uppercase">Espace Membre</h1>
@@ -92,7 +80,7 @@ const Members = () => {
                         <p className="text-gray-400">Confirmez votre présence avant la deadline (Veille 23h59)</p>
                     </div>
                     {user?.role === 'coach' && (
-                        <button 
+                        <button
                             onClick={handleGenerateSchedule}
                             className="bg-secondary hover:bg-gray-700 text-white font-bold py-2 px-4 rounded border border-gray-600 transition-colors"
                         >
@@ -107,10 +95,10 @@ const Members = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {sessions.length > 0 ? (
                             sessions.map(session => (
-                                <SessionCard 
-                                    key={session.id} 
-                                    session={session} 
-                                    onVote={handleVote} 
+                                <SessionCard
+                                    key={session.id}
+                                    session={session}
+                                    onVote={handleVote}
                                 />
                             ))
                         ) : (

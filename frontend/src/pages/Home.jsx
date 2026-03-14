@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
+import api from '../services/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CoachCard from '../components/CoachCard';
@@ -22,7 +22,7 @@ const Home = () => {
         e.preventDefault();
         setContactStatus({ loading: true, error: null, success: false });
         try {
-            await axios.post('http://localhost:8000/api/contact/', contactForm);
+            await api.post('/contact', contactForm);
             setContactStatus({ loading: false, error: null, success: true });
             setContactForm({ nom: '', email: '', message: '' });
             setTimeout(() => setContactStatus(prev => ({ ...prev, success: false })), 5000);
@@ -47,8 +47,8 @@ const Home = () => {
         const fetchData = async () => {
             try {
                 const [coachesRes, eventsRes] = await Promise.all([
-                    axios.get('http://localhost:8000/api/coaches/'),
-                    axios.get('http://localhost:8000/api/evenements/')
+                    api.get('/coaches'),
+                    api.get('/evenements'),
                 ]);
                 setCoaches(coachesRes.data);
                 setEvents(eventsRes.data);
