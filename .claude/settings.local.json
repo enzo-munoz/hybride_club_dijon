@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:pulseheberg.com)",
+      "WebFetch(domain:docs.pulseheberg.com)",
+      "WebSearch",
+      "WebFetch(domain:newsroom.pulseheberg.com)"
+    ]
+  }
+}
