@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Seance;
 use App\Models\Vote;
@@ -19,7 +18,7 @@ class DatabaseSeeder extends Seeder
             'prenom'   => 'Thomas',
             'nom'      => 'Dupont',
             'email'    => 'thomas@hybrideclub.fr',
-            'password' => Hash::make('coach123'),
+            'password' => 'coach123',
             'role'     => 'coach',
             'bio'      => 'Coach certifié Hyrox avec 8 ans d\'expérience. Spécialiste en préparation physique et endurance.',
             'photo'    => null,
@@ -29,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'prenom'   => 'Sarah',
             'nom'      => 'Martin',
             'email'    => 'sarah@hybrideclub.fr',
-            'password' => Hash::make('coach123'),
+            'password' => 'coach123',
             'role'     => 'coach',
             'bio'      => 'Athlète Hyrox compétitrice et coach passionnée. Spécialiste en force et conditionnement.',
             'photo'    => null,
@@ -48,7 +47,7 @@ class DatabaseSeeder extends Seeder
                 'prenom'   => $m['prenom'],
                 'nom'      => $m['nom'],
                 'email'    => $m['email'],
-                'password' => Hash::make('membre123'),
+                'password' => 'membre123',
                 'role'     => 'membre',
             ]);
         }
