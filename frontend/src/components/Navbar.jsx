@@ -1,18 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
-    const { isAuthenticated, logout } = useAuth();
-    const location = useLocation();
+    const { pathname } = useLocation();
 
     const NavLink = ({ href, children }) => {
-        const isHome = location.pathname === '/';
+        const isHome = pathname === '/';
         const sectionId = href.replace('#', '');
-        
+
         if (isHome) {
             return (
-                <a 
-                    href={href} 
+                <a
+                    href={href}
                     className="hover:text-primary transition-colors"
                     onClick={(e) => {
                         e.preventDefault();
@@ -25,10 +23,7 @@ const Navbar = () => {
             );
         } else {
             return (
-                <Link 
-                    to={`/${href}`} 
-                    className="hover:text-primary transition-colors"
-                >
+                <Link to={`/${href}`} className="hover:text-primary transition-colors">
                     {children}
                 </Link>
             );
@@ -46,22 +41,6 @@ const Navbar = () => {
                     <li><NavLink href="#coaches">Coachs</NavLink></li>
                     <li><NavLink href="#evenements">Événements</NavLink></li>
                     <li><NavLink href="#contact">Contact</NavLink></li>
-                    {isAuthenticated ? (
-                        <>
-                            <li><Link to="/membres" className="hover:text-primary transition-colors">Espace Membre</Link></li>
-                            <li>
-                                <button onClick={logout} className="bg-primary px-4 py-2 rounded text-white hover:bg-orange-600 transition-colors">
-                                    Déconnexion
-                                </button>
-                            </li>
-                        </>
-                    ) : (
-                        <li>
-                            <Link to="/login" className="bg-primary px-4 py-2 rounded text-white hover:bg-orange-600 transition-colors">
-                                Connexion Membre
-                            </Link>
-                        </li>
-                    )}
                 </ul>
             </nav>
         </header>
