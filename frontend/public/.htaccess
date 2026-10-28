@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    Options -MultiViews -Indexes
+    RewriteEngine On
+
+    # URL propre pour la politique de confidentialité (fichier HTML statique)
+    RewriteRule ^politique-confidentialite/?$ politique-confidentialite.html [L]
+
+    # Fichiers et dossiers existants servis tels quels
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Tout le reste → application React
+    RewriteRule ^ index.html [L]
+</IfModule>

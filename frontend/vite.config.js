@@ -6,11 +6,6 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: path.resolve(__dirname, '../public'),
-    emptyOutDir: false,
-  },
-  server: {
-    proxy: {
-      '/api': 'http://localhost:8000',
-    },
+    emptyOutDir: true,
   },
 })
